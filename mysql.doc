@@ -1,0 +1,268 @@
+修改密码：
+　　　(1)停止mysql服务:net stop mysql
+　　　(2)在cmd下输入mysqld--skip-grant-tables启动服务器
+　　　(3)在新打开的cmd下输入mysql -uroot -p 不需要密码	
+　　　(4)use mysql;
+　　　(5)update user set password=password(abc)WHERE user=‘root’
+　　　(6)关闭窗口，在任务管理器结束mysqld进程
+　　　(7)重启mysql
+数据库的介绍
+列：字段
+行：一条记录
+数据库语言分类：
+DDL：数据库定义语言，用来操作对象,create drop  
+DML：数据操作语言（操作数据库中表的记录） insert update delete
+DQL：数据库查询语言select
+DCL:数据库控制语言
+对数据库的操作
+查看当前使用的数据库:
+show databases;
+查看前面创建的数据库的定义信息
+show create databases mydb2;
+删除前面创建的数据库
+drop databases mydb3
+修改数据库：
+alter database mydb2 character set utf8;
+查看当前使用的数据库:
+select databases();
+切换数据库:
+use mydb2;
+对表格的操作
+语法：
+
+create table 表名(
+　　　字段1 字段类型,
+　　　字段2 字段类型，
+　　　....
+　　　字段n, 字段类型
+)    
+
+常用数据类型
+int
+double(5,2)    表示最多5位，其中必须有两位小数
+char：固定字符串长度
+varchar:可变长度字符串
+text:大数据的文本
+blob:字节类型
+date：时期类型
+time:时间类型                                                                                 
+	
+
+
+
+增加一个列：
+alter table enp add image blob;
+
+修改一个列的数据类型
+alter table emp modify job varchar(60)
+删除列
+alter table emp drop image;
+
+修改表名:
+rename table emp to user
+
+修改字符集:
+alter table user character set gbk;
+
+修改列名:
+alter table user chanage name username varchar(10)
+
+删除表:
+drop table user;
+DML:对表里面的数据进行操作
+　　　插入操作：insert into 表名(列名1,列名2) values(列值1， 列值2);
+　　　修改操作：update 表名 SET 列名1=列值1， 列名2=列值2 .. where 列名=值
+　　　删除:delete from 表名 where条件  truncate table 表名
+DQL：查询
+语法：select 列名字 from 表名 where group by having order by
+
+
+查询基础
+
+条件查询：where条件查询
+
+
+
+
+
+模糊查询
+通配符:_任意一个字符 %任意0-n个字符
+关键字:like
+
+字段控制查询
+distinct
+去掉重复数据：distinct 当是两列是，只有两列的值完全一样时，才算重复数据
+
+ifnull：
+
+
+给列其别名 as
+
+
+排序：order by,默认升序， desc降序
+
+ 
+聚合函数:用来操作列的函数
+count()函数
+
+
+
+
+
+
+分组查询：GROUP BY
+
+查询表中的男生人数和女生人数
+
+根据gender进行分组，然后各自统计人数
+
+凡是和聚合函数同时出现的列名一定要出现在GROUP BY之后
+
+
+
+
+having
+
+
+
+
+
+
+order by永远在最后
+
+数据的完整性
+创建表的时候給表添加约束：
+完整性的分类：
+1.实体完整性：表示每一条数据都不重复(行级别的约束)
+a)主键约束(primary key)
+　　　注意：每一个表中必须有一个主键，数据唯一且不能是null
+　　　添加方式：
+　　　
+　　　
+　　　
+　　　这个方式适合创建联合主键(两列数据完全一致才算是违反主键)
+　　　
+　　　alter table student add constraint pk_stu_id primary key(id)
+　　　
+b)唯一约束(union)
+　　　
+c)自动增长列(auto_increment) 
+i.
+2.域完整性（列级别）
+　　　限制当前单元格，不与其他单元格进行比较
+　　　非空约束：not null
+　　　
+　　　默认值约束
+　　　
+　　　
+3.引用完整性
+4.创建学生表，外键对应必须是主键
+　　　
+
+创建分数表，并且添加外键约束
+constraint fk_stu_score1_sid foreign key(id) reference stu(sid)
+
+主表和次表是一对多的关系
+
+
+4.表与表之间的关系
+a)一对一:
+b)一对多：
+i. 
+c)多对多：
+　　　 先建立两个表
+　　　 
+　　　建立中间表
+　　　
+　　　建立关系
+　　　
+
+拆开表的原因：为了避免重复数据的占用空间
+
+多表查询
+分类:
+合并结果集：union union all
+连接查询:
+　　　内连接: [inner] join on
+　　　外链接: OUTER join on
+　　　左外连接: LEFT　join
+　　　右外连接:right joim
+　　　自然连接:
+　　　NATURAL  JOIN
+合并结果集：要求列数和列的类型一致
+union：去除重复记录
+
+union all:不去除重复记录
+
+多表联查
+
+
+内连接
+SELECT * FROM emp e JOIN dept d ON e.deptno=d.deptno
+内连接是两个表都有的数据才会出现
+
+
+
+外连接
+左外连接
+SELECT * FROM student s LEFT JOIN score c on s.stuid=c.stuid
+
+
+右外连接
+SELECT * FROM student s RIGHT JOIN score c ON s.studi=c.stuid                                                                                  
+
+
+
+连接查询心得：
+  连接不限于两张表，连接查询也可以是三张表等。两张表查询一定有一个
+主外键条件，三张表查询一定有两个主外键条件。
+
+多表查询
+
+SELECT * FROM stuednt s, score c, course cc WHERE s.stuid=c.stuid AND   c.courseid=cc.courseid                                         
+                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+
+SELECT * FROM student s
+JOIN score c ON s.stuid = c.stuid
+JOIN course cc ON c.courseid=cc.courseid                                                                                                    
+
+
+
+
+自然连接
+select * from student natural join score;//自动找相同列的类型数据，自动匹配                  
+ 
+
+子查询
+子查询出现的位置：
+　　　where关键字后面作为一个条件和from关键字后面作为一个表
+查询与scott同一个部门的员工:
+select * from emp where deptno=
+(select deptno from emp where ename=”scott”);
+
+
+
+
+
+
+自连接
+
+可以通过7369查找到经理的编号，员工编号和员工姓名
+
+
+练习：求各个部门薪水最高的员工的所有信息
+
+这个是不对的，因为子条件查询出来的是各个部门的最高工资，但是A部门的最高工资
+可能在C部门中也存在，因此也会查出c部门里的工资。因此不准确。
+缺少一个条件：就是这个部门的最高工资和这个部门的编号。
+
+ 
+
+
+数据库的导出(生成.sql文件)
+
+
+ 
+
+ 
